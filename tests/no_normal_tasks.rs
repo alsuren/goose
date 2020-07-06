@@ -40,9 +40,9 @@ fn test_no_normal_tasks() {
             .setup()
             .unwrap()
             .register_taskset(
-                taskset!("LoadTest")
-                    .register_task(task!(login).set_on_start())
-                    .register_task(task!(logout).set_on_stop()),
+                GooseTaskSet::new("LoadTest")
+                    .register_task(GooseTask::new(login).set_on_start())
+                    .register_task(GooseTask::new(logout).set_on_stop()),
             )
             .execute()
             .unwrap();

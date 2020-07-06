@@ -14,7 +14,7 @@
 //! ```rust
 //!     use goose::prelude::*;
 //!
-//!     let mut loadtest_tasks = taskset!("LoadtestTasks");
+//!     let mut loadtest_tasks = GooseTaskSet::new("LoadtestTasks");
 //! ```
 //!
 //! ### Task Set Weight
@@ -29,11 +29,10 @@
 //! use goose::prelude::*;
 //!
 //! fn main() -> Result<(), GooseError> {
-//!     let mut foo_tasks = taskset!("FooTasks").set_weight(10)?;
-//!     let mut bar_tasks = taskset!("BarTasks").set_weight(5)?;
+//!     let mut foo_tasks = GooseTaskSet::new("FooTasks").set_weight(10)?;
+//!     let mut bar_tasks = GooseTaskSet::new("BarTasks").set_weight(5)?;
 //!
 //!     Ok(())
-//! }
 //! ```
 //!
 //! ### Task Set Host
@@ -47,8 +46,8 @@
 //! ```rust
 //!     use goose::prelude::*;
 //!
-//!     let mut foo_tasks = taskset!("FooTasks").set_host("http://www.local");
-//!     let mut bar_tasks = taskset!("BarTasks").set_host("http://www2.local");
+//!     let mut foo_tasks = GooseTaskSet::new("FooTasks").set_host("http://www.local");
+//!     let mut bar_tasks = GooseTaskSet::new("BarTasks").set_host("http://www2.local");
 //! ```
 //!
 //! ### Task Set Wait Time
@@ -62,8 +61,8 @@
 //! ```rust
 //!     use goose::prelude::*;
 //!
-//!     let mut foo_tasks = taskset!("FooTasks").set_wait_time(0, 3).unwrap();
-//!     let mut bar_tasks = taskset!("BarTasks").set_wait_time(5, 10).unwrap();
+//!     let mut foo_tasks = GooseTaskSet::new("FooTasks").set_wait_time(0, 3).unwrap();
+//!     let mut bar_tasks = GooseTaskSet::new("BarTasks").set_wait_time(5, 10).unwrap();
 //! ```
 //! ## Creating Tasks
 //!
@@ -301,22 +300,6 @@ use crate::{GooseConfiguration, GooseError};
 
 static APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
 
-/// task!(foo) expands to GooseTask::new(foo),
-#[macro_export]
-macro_rules! task {
-    ($task_func:ident) => {
-        GooseTask::new($task_func)
-    };
-}
-
-/// taskset!("foo") expands to GooseTaskSet::new("foo").
-#[macro_export]
-macro_rules! taskset {
-    ($name:tt) => {
-        GooseTaskSet::new($name)
-    };
-}
-
 /// Goose tasks return a result, which is empty on success, or contains a GooseTaskError
 /// on error.
 pub type GooseTaskResult = Result<(), GooseTaskError>;
@@ -446,7 +429,7 @@ impl GooseTaskSet {
     /// ```rust
     ///     use goose::prelude::*;
     ///
-    ///     let mut example_tasks = taskset!("ExampleTasks");
+    ///     let mut example_tasks = GooseTaskSet::new("ExampleTasks");
     /// ```
     pub fn new(name: &str) -> Self {
         trace!("new taskset: name: {}", &name);
@@ -471,7 +454,7 @@ impl GooseTaskSet {
     /// ```rust
     ///     use goose::prelude::*;
     ///
-    ///     let mut example_tasks = taskset!("ExampleTasks");
+    ///     let mut example_tasks = GooseTaskSet::new("ExampleTasks");
     ///     example_tasks.register_task(task!(a_task_function));
     ///
     ///     /// A very simple task that simply loads the "a" page.
@@ -498,7 +481,7 @@ impl GooseTaskSet {
     /// use goose::prelude::*;
     ///
     /// fn main() -> Result<(), GooseError> {
-    ///     let mut example_tasks = taskset!("ExampleTasks").set_weight(3)?;
+    ///     let mut example_tasks = GooseTaskSet::new("ExampleTasks").set_weight(3)?;
     ///
     ///     Ok(())
     /// }
@@ -525,7 +508,7 @@ impl GooseTaskSet {
     /// ```rust
     ///     use goose::prelude::*;
     ///
-    ///     let mut example_tasks = taskset!("ExampleTasks").set_host("http://10.1.1.42");
+    ///     let mut example_tasks = GooseTaskSet::new("ExampleTasks").set_host("http://10.1.1.42");
     /// ```
     pub fn set_host(mut self, host: &str) -> Self {
         trace!("{} set_host: {}", self.name, host);
@@ -543,7 +526,7 @@ impl GooseTaskSet {
     /// use goose::prelude::*;
     ///
     /// fn main() -> Result<(), GooseError> {
-    ///     taskset!("ExampleTasks").set_wait_time(0, 1)?;
+    ///     let mut example_tasks = GooseTaskSet::new("ExampleTasks").set_wait_time(0, 1)?;
     ///
     ///     Ok(())
     /// }
@@ -1827,7 +1810,7 @@ impl GooseUser {
     ///
     /// fn main() -> Result<(), GooseError> {
     ///     GooseAttack::initialize()?
-    ///         .register_taskset(taskset!("LoadtestTasks").set_host("http//foo.example.com/")
+    ///         .register_taskset(GooseTaskSet::new("LoadtestTasks").set_host("http//foo.example.com/")
     ///             .set_wait_time(0, 3)?
     ///             .register_task(task!(task_foo).set_weight(10)?)
     ///             .register_task(task!(task_bar))
@@ -2248,7 +2231,7 @@ mod tests {
             Ok(())
         }
 
-        let mut task_set = taskset!("foo");
+        let mut task_set = GooseTaskSet::new("foo");
         assert_eq!(task_set.name, "foo");
         assert_eq!(task_set.task_sets_index, usize::max_value());
         assert_eq!(task_set.weight, 1);

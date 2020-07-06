@@ -51,9 +51,9 @@ fn test_start() {
         crate::GooseAttack::initialize_with_config(common::build_configuration(&server))
             .setup()
             .unwrap()
-            .test_start(task!(setup))
+            .test_start(GooseTask::new(setup))
             .register_taskset(
-                taskset!("LoadTest").register_task(task!(get_index).set_weight(9).unwrap()),
+                GooseTaskSet::new("LoadTest").register_task(GooseTask::new(get_index).set_weight(9).unwrap()),
             )
             .execute()
             .unwrap();
@@ -93,9 +93,9 @@ fn test_stop() {
         crate::GooseAttack::initialize_with_config(common::build_configuration(&server))
             .setup()
             .unwrap()
-            .test_stop(task!(teardown))
+            .test_stop(GooseTask::new(teardown))
             .register_taskset(
-                taskset!("LoadTest").register_task(task!(get_index).set_weight(9).unwrap()),
+                GooseTaskSet::new("LoadTest").register_task(GooseTask::new(get_index).set_weight(9).unwrap()),
             )
             .execute()
             .unwrap();
@@ -138,11 +138,11 @@ fn test_setup_teardown() {
     let _goose_attack = crate::GooseAttack::initialize_with_config(configuration)
         .setup()
         .unwrap()
-        .test_start(task!(setup))
+        .test_start(GooseTask::new(setup))
         .register_taskset(
-            taskset!("LoadTest").register_task(task!(get_index).set_weight(9).unwrap()),
+            GooseTaskSet::new("LoadTest").register_task(GooseTask::new(get_index).set_weight(9).unwrap()),
         )
-        .test_stop(task!(teardown))
+        .test_stop(GooseTask::new(teardown))
         .execute()
         .unwrap();
 

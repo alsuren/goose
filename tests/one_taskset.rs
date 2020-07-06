@@ -38,9 +38,9 @@ fn test_single_taskset() {
             .setup()
             .unwrap()
             .register_taskset(
-                taskset!("LoadTest")
-                    .register_task(task!(get_index).set_weight(9).unwrap())
-                    .register_task(task!(get_about).set_weight(3).unwrap()),
+                GooseTaskSet::new("LoadTest")
+                    .register_task(GooseTask::new(get_index).set_weight(9).unwrap())
+                    .register_task(GooseTask::new(get_about).set_weight(3).unwrap()),
             )
             .execute()
             .unwrap();
@@ -77,9 +77,9 @@ fn test_single_taskset_empty_config_host() {
         .setup()
         .unwrap()
         .register_taskset(
-            taskset!("LoadTest")
-                .register_task(task!(get_index).set_weight(9).unwrap())
-                .register_task(task!(get_about).set_weight(3).unwrap()),
+            GooseTaskSet::new("LoadTest")
+                .register_task(GooseTask::new(get_index).set_weight(9).unwrap())
+                .register_task(GooseTask::new(get_about).set_weight(3).unwrap()),
         )
         .set_host(&host)
         .execute()

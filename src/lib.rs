@@ -91,14 +91,14 @@
 //!
 //! fn main() -> Result<(), GooseError> {
 //!     GooseAttack::initialize()?
-//!         .register_taskset(taskset!("LoadtestTasks")
+//!         .register_taskset(GooseTaskSet::new("LoadtestTasks")
 //!             .set_wait_time(0, 3)?
 //!             // Register the foo task, assigning it a weight of 10.
-//!             .register_task(task!(loadtest_foo).set_weight(10)?)
+//!             .register_task(GooseTask::new(loadtest_foo).set_weight(10)?)
 //!             // Register the bar task, assigning it a weight of 2 (so it
 //!             // runs 1/5 as often as bar). Apply a task name which shows up
 //!             // in statistics.
-//!             .register_task(task!(loadtest_bar).set_name("bar").set_weight(2)?)
+//!             .register_task(GooseTask::new(loadtest_bar).set_name("bar").set_weight(2)?)
 //!         )
 //!         // You could also set a default host here, for example:
 //!         //.set_host("http://dev.local/")
@@ -757,11 +757,11 @@ impl GooseAttack {
     ///
     /// fn main() -> Result<(), GooseError> {
     ///     GooseAttack::initialize()?
-    ///         .register_taskset(taskset!("ExampleTasks")
-    ///             .register_task(task!(example_task))
+    ///         .register_taskset(GooseTaskSet::new("ExampleTasks")
+    ///             .register_task(GooseTask::new(example_task))
     ///         )
-    ///         .register_taskset(taskset!("OtherTasks")
-    ///             .register_task(task!(other_task))
+    ///         .register_taskset(GooseTaskSet::new("OtherTasks")
+    ///             .register_task(GooseTask::new(other_task))
     ///         );
     ///
     ///     Ok(())
@@ -798,7 +798,7 @@ impl GooseAttack {
     ///
     /// fn main() -> Result<(), GooseError> {
     ///     GooseAttack::initialize()?
-    ///         .test_start(task!(setup));
+    ///         .test_start(GooseTask::new(setup));
     ///
     ///     Ok(())
     /// }
@@ -827,7 +827,7 @@ impl GooseAttack {
     ///
     /// fn main() -> Result<(), GooseError> {
     ///     GooseAttack::initialize()?
-    ///         .test_stop(task!(teardown));
+    ///         .test_stop(GooseTask::new(teardown));
     ///
     ///     Ok(())
     /// }
@@ -941,9 +941,9 @@ impl GooseAttack {
     ///
     /// fn main() -> Result<(), GooseError> {
     ///     let _goose_attack = GooseAttack::initialize()?
-    ///         .register_taskset(taskset!("ExampleTasks")
-    ///             .register_task(task!(example_task).set_weight(2)?)
-    ///             .register_task(task!(another_example_task).set_weight(3)?)
+    ///         .register_taskset(GooseTaskSet::new("ExampleTasks")
+    ///             .register_task(GooseTask::new(example_task).set_weight(2)?)
+    ///             .register_task(GooseTask::new(another_example_task).set_weight(3)?)
     ///         )
     ///         .execute()?;
     ///
@@ -1290,9 +1290,9 @@ impl GooseAttack {
     ///
     /// fn main() -> Result<(), GooseError> {
     ///     let _goose_attack = GooseAttack::initialize()?
-    ///         .register_taskset(taskset!("ExampleTasks")
-    ///             .register_task(task!(example_task).set_weight(2)?)
-    ///             .register_task(task!(another_example_task).set_weight(3)?)
+    ///         .register_taskset(GooseTaskSet::new("ExampleTasks")
+    ///             .register_task(GooseTask::new(example_task).set_weight(2)?)
+    ///             .register_task(GooseTask::new(another_example_task).set_weight(3)?)
     ///         )
     ///         .execute()?
     ///         .display();
