@@ -301,11 +301,11 @@ use crate::{GooseConfiguration, GooseError};
 
 static APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
 
-/// task!(foo) expands to GooseTask::from_async_fn(foo),
+/// task!(foo) expands to GooseTask::new(foo),
 #[macro_export]
 macro_rules! task {
     ($task_func:ident) => {
-        GooseTask::from_async_fn($task_func)
+        GooseTask::new($task_func)
     };
 }
 
@@ -1920,14 +1920,14 @@ pub fn get_base_url(
 // A helper trait that allows GooseTask::from_async_fn() to accept an async fn
 // that borrows its arguments (otherwise specifying lifetimes is impossible)
 pub trait GooseTaskCallback<'a>: Send + Sync {
-    type Output: std::future::Future<Output = ()> + Send + 'a;
+    type Output: std::future::Future<Output = GooseTaskResult> + Send + 'a;
     fn call(&self, arg: &'a GooseUser) -> Self::Output;
 }
 
 impl<'a, Fut: 'a, F> GooseTaskCallback<'a> for F
 where
     F: Fn(&'a GooseUser) -> Fut + Send + Sync,
-    Fut: std::future::Future<Output = ()> + Send,
+    Fut: std::future::Future<Output = GooseTaskResult> + Send,
 {
     type Output = Fut;
     fn call(&self, arg: &'a GooseUser) -> Fut {
@@ -1941,7 +1941,7 @@ trait WrappedGooseTaskCallback<'a>: Send + Sync {
     fn call_and_box(
         &self,
         arg: &'a GooseUser,
-    ) -> Pin<Box<dyn std::future::Future<Output = ()> + Send + 'a>>;
+    ) -> Pin<Box<dyn std::future::Future<Output = GooseTaskResult> + Send + 'a>>;
 }
 
 impl<'a, F> WrappedGooseTaskCallback<'a> for F
@@ -1951,7 +1951,7 @@ where
     fn call_and_box(
         &self,
         arg: &'a GooseUser,
-    ) -> Pin<Box<dyn std::future::Future<Output = ()> + Send + 'a>> {
+    ) -> Pin<Box<dyn std::future::Future<Output = GooseTaskResult> + Send + 'a>> {
         self.call(arg).boxed()
     }
 }
@@ -1981,7 +1981,7 @@ pub struct GooseTask {
 }
 
 impl GooseTask {
-    pub fn from_async_fn<F>(cb: F) -> Self
+    pub fn new<F>(cb: F) -> Self
     where
         for<'a> F: GooseTaskCallback<'a> + 'static,
     {
@@ -1995,28 +1995,12 @@ impl GooseTask {
             callback: Arc::new(cb),
         }
     }
-    pub fn new(
-        function: for<'r> fn(
-            &'r GooseUser,
-        ) -> Pin<Box<dyn Future<Output = GooseTaskResult> + Send + 'r>>,
-    ) -> Self {
-        trace!("new task");
-        GooseTask {
-            tasks_index: usize::max_value(),
-            name: "".to_string(),
-            weight: 1,
-            sequence: 0,
-            on_start: false,
-            on_stop: false,
-            callback: Arc::new(function),
-        }
-    }
 
     /// Execute the callback function and return a boxed future.
     pub fn function<'r>(
         &self,
         user: &'r GooseUser,
-    ) -> Pin<Box<dyn Future<Output = ()> + Send + 'r>> {
+    ) -> Pin<Box<dyn Future<Output = GooseTaskResult> + Send + 'r>> {
         self.callback.call_and_box(user)
     }
 
