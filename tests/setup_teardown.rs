@@ -53,7 +53,8 @@ fn test_start() {
             .unwrap()
             .test_start(GooseTask::new(setup))
             .register_taskset(
-                GooseTaskSet::new("LoadTest").register_task(GooseTask::new(get_index).set_weight(9).unwrap()),
+                GooseTaskSet::new("LoadTest")
+                    .register_task(GooseTask::new(get_index).set_weight(9).unwrap()),
             )
             .execute()
             .unwrap();
@@ -95,7 +96,8 @@ fn test_stop() {
             .unwrap()
             .test_stop(GooseTask::new(teardown))
             .register_taskset(
-                GooseTaskSet::new("LoadTest").register_task(GooseTask::new(get_index).set_weight(9).unwrap()),
+                GooseTaskSet::new("LoadTest")
+                    .register_task(GooseTask::new(get_index).set_weight(9).unwrap()),
             )
             .execute()
             .unwrap();
@@ -140,7 +142,8 @@ fn test_setup_teardown() {
         .unwrap()
         .test_start(GooseTask::new(setup))
         .register_taskset(
-            GooseTaskSet::new("LoadTest").register_task(GooseTask::new(get_index).set_weight(9).unwrap()),
+            GooseTaskSet::new("LoadTest")
+                .register_task(GooseTask::new(get_index).set_weight(9).unwrap()),
         )
         .test_stop(GooseTask::new(teardown))
         .execute()
