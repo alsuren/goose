@@ -58,7 +58,7 @@ fn test_stat_logs_json() {
     let _goose_attack = crate::GooseAttack::initialize_with_config(config)
         .setup()
         .unwrap()
-        .register_taskset(taskset!("LoadTest").register_task(task!(get_index)))
+        .register_taskset(GooseTaskSet::new("LoadTest").register_task(GooseTask::new(get_index)))
         .execute()
         .unwrap();
 
@@ -92,7 +92,7 @@ fn test_stat_logs_csv() {
     let _goose_attack = crate::GooseAttack::initialize_with_config(config)
         .setup()
         .unwrap()
-        .register_taskset(taskset!("LoadTest").register_task(task!(get_index)))
+        .register_taskset(GooseTaskSet::new("LoadTest").register_task(GooseTask::new(get_index)))
         .execute()
         .unwrap();
 
@@ -126,7 +126,7 @@ fn test_stat_logs_raw() {
     let _goose_attack = crate::GooseAttack::initialize_with_config(config)
         .setup()
         .unwrap()
-        .register_taskset(taskset!("LoadTest").register_task(task!(get_index)))
+        .register_taskset(GooseTaskSet::new("LoadTest").register_task(GooseTask::new(get_index)))
         .execute()
         .unwrap();
 
@@ -165,9 +165,9 @@ fn test_debug_logs_raw() {
         .setup()
         .unwrap()
         .register_taskset(
-            taskset!("LoadTest")
-                .register_task(task!(get_index))
-                .register_task(task!(get_error)),
+            GooseTaskSet::new("LoadTest")
+                .register_task(GooseTask::new(get_index))
+                .register_task(GooseTask::new(get_error)),
         )
         .execute()
         .unwrap();
@@ -207,9 +207,9 @@ fn test_debug_logs_json() {
         .setup()
         .unwrap()
         .register_taskset(
-            taskset!("LoadTest")
-                .register_task(task!(get_index))
-                .register_task(task!(get_error)),
+            GooseTaskSet::new("LoadTest")
+                .register_task(GooseTask::new(get_index))
+                .register_task(GooseTask::new(get_error)),
         )
         .execute()
         .unwrap();
@@ -252,9 +252,9 @@ fn test_stats_and_debug_logs() {
         .setup()
         .unwrap()
         .register_taskset(
-            taskset!("LoadTest")
-                .register_task(task!(get_index))
-                .register_task(task!(get_error)),
+            GooseTaskSet::new("LoadTest")
+                .register_task(GooseTask::new(get_index))
+                .register_task(GooseTask::new(get_error)),
         )
         .execute()
         .unwrap();

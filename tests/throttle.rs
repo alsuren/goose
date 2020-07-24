@@ -55,9 +55,9 @@ fn test_throttle() {
         .setup()
         .unwrap()
         .register_taskset(
-            taskset!("LoadTest")
-                .register_task(task!(get_about))
-                .register_task(task!(get_index)),
+            GooseTaskSet::new("LoadTest")
+                .register_task(GooseTask::new(get_about))
+                .register_task(GooseTask::new(get_index)),
         )
         .execute()
         .unwrap();
@@ -97,9 +97,9 @@ fn test_throttle() {
         .setup()
         .unwrap()
         .register_taskset(
-            taskset!("LoadTest")
-                .register_task(task!(get_about))
-                .register_task(task!(get_index)),
+            GooseTaskSet::new("LoadTest")
+                .register_task(GooseTask::new(get_about))
+                .register_task(GooseTask::new(get_index)),
         )
         .execute()
         .unwrap();

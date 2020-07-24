@@ -47,17 +47,11 @@ fn test_gaggle() {
         master_configuration.run_time = "3".to_string();
         let _goose_attack = crate::GooseAttack::initialize_with_config(master_configuration)
             .setup()
-<<<<<<< HEAD
             .unwrap()
             .register_taskset(GooseTaskSet::new("User1").register_task(GooseTask::new(get_index)))
             .register_taskset(GooseTaskSet::new("User2").register_task(GooseTask::new(get_about)))
             .execute()
             .unwrap();
-=======
-            .register_taskset(GooseTaskSet::new("User1").register_task(GooseTask::new(get_index)))
-            .register_taskset(GooseTaskSet::new("User2").register_task(GooseTask::new(get_about)))
-            .execute();
->>>>>>> kill off macro
     });
 
     // Start worker instance of the load test.

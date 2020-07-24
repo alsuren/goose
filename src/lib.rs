@@ -40,8 +40,11 @@
 //! necessary for your load test, so you don't need to manually add them:
 //!
 //! ```rust
-//! use goose::{GooseAttack, task, taskset};
-//! use goose::goose::{GooseTaskSet, GooseUser, GooseTask};
+//! pub use goose::goose::{
+//!     GooseMethod, GooseTask, GooseTaskError, GooseTaskResult, GooseTaskSet, GooseUser,
+//! };
+//! pub use goose::{GooseAttack, GooseError, GooseRequestStats};
+
 //! ```
 //!
 //! Below your `main` function (which currently is the default `Hello, world!`), add

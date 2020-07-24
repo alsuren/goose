@@ -168,7 +168,6 @@ pub async fn user_main(
                     thread_user.task_request_name = Some(thread_task_name.to_string());
                 }
                 // Invoke the task function.
-                let _ = function(&thread_user).await;
                 let _ = thread_task_set.tasks[*task_index]
                     .function(&thread_user)
                     .await;
