@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.9.1-dev
+ - remove task! and taskset! macros
 
 ## 0.9.0 July 23, 2020
  - fix code documentation, requests are async and require await
